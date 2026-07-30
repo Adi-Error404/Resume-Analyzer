@@ -26,7 +26,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ text: extractedText, fileName: file.name });
   } catch (error: any) {
-    console.error("Upload Error:", error);
+    console.error("Upload Error:", error?.message);
+    console.error("Upload Stack:", error?.stack);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

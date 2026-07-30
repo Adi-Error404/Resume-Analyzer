@@ -1,26 +1,12 @@
 import mammoth from 'mammoth';
+import pdfParse from 'pdf-parse';
 
 /**
- * Extracts plain text from a PDF buffer using pdfjs-dist (Node.js compatible).
+ * Extracts plain text from a PDF buffer using pdf-parse (pure Node.js, no browser APIs).
  */
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Dynamically import pdfjs-dist legacy build which works in Node.js API routes
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-
-  const loadingTask = pdfjs.getDocument({ data: new Uint8Array(buffer) });
-  const pdf = await loadingTask.promise;
-
-  let fullText = '';
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      .map((item: any) => ('str' in item ? item.str : ''))
-      .join(' ');
-    fullText += pageText + '\n';
-  }
-
-  return fullText;
+  const data = await pdfParse(buffer);
+  return data.text;
 }
 
 /**
