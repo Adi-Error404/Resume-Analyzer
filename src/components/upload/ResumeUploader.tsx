@@ -123,7 +123,7 @@ export function ResumeUploader() {
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium">Target Role</label>
-          <Select onValueChange={setSelectedRole} value={selectedRole}>
+          <Select onValueChange={(value) => setSelectedRole(value ?? '')} value={selectedRole}>
             <SelectTrigger className="w-full h-12 bg-background/50 backdrop-blur">
               <SelectValue placeholder="Select a job role" />
             </SelectTrigger>
