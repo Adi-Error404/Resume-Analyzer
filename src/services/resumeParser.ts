@@ -1,10 +1,18 @@
 import mammoth from 'mammoth';
-import pdfParse from 'pdf-parse';
+
+// Polyfill DOMMatrix for Node.js serverless environment (Vercel)
+if (typeof global.DOMMatrix === 'undefined') {
+  // @ts-expect-error polyfill for Node runtime
+  global.DOMMatrix = class DOMMatrix { };
+}
 
 /**
- * Extracts plain text from a PDF buffer using pdf-parse (pure Node.js, no browser APIs).
+ * Extracts plain text from a PDF buffer using pdf-parse.
  */
 async function extractPdfText(buffer: Buffer): Promise<string> {
+  // Use require inside the function so it loads AFTER DOMMatrix is polyfilled
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfParse = require('pdf-parse/lib/pdf-parse.js');
   const data = await pdfParse(buffer);
   return data.text;
 }
@@ -22,9 +30,10 @@ export async function parseResume(fileBuffer: Buffer, fileName: string): Promise
       const result = await mammoth.extractRawText({ buffer: fileBuffer });
       return result.value;
     } else {
-      throw new Error(`Unsupported file type: .${extension}. Please upload a PDF or DOCX file.`);
+      throw new Error('Unsupported file format. Please upload a PDF or DOCX file.');
     }
-  } catch (error: any) {
-    throw new Error(`Error parsing file: ${error.message}`);
+  } catch (error) {
+    console.error('Error parsing file:', error);
+    throw error;
   }
 }
