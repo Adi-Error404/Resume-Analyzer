@@ -1,20 +1,15 @@
 import mammoth from 'mammoth';
-
-// Polyfill DOMMatrix for Node.js serverless environment (Vercel)
-if (typeof global.DOMMatrix === 'undefined') {
-  // @ts-expect-error polyfill for Node runtime
-  global.DOMMatrix = class DOMMatrix { };
-}
+import { extractText, getDocumentProxy } from 'unpdf';
 
 /**
- * Extracts plain text from a PDF buffer using pdf-parse.
+ * Extracts plain text from a PDF buffer using unpdf.
+ * unpdf ships a patched pdfjs build with no browser-only APIs (no DOMMatrix, no canvas),
+ * making it safe to use in Node.js / Vercel serverless functions.
  */
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use require inside the function so it loads AFTER DOMMatrix is polyfilled
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require('pdf-parse/lib/pdf-parse.js');
-  const data = await pdfParse(buffer);
-  return data.text;
+  const pdf = await getDocumentProxy(new Uint8Array(buffer));
+  const { text } = await extractText(pdf, { mergePages: true });
+  return text;
 }
 
 /**
