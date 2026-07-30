@@ -1,103 +1,106 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CheckCircle2, FileText, BarChart, BrainCircuit } from "lucide-react";
+import { COMPANIES } from "@/constants/companies";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      {/* Hero Section */}
+      <section className="w-full py-24 md:py-32 lg:py-48 flex flex-col items-center text-center relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 -z-10 bg-gradient-premium opacity-50 blur-3xl"></div>
+        
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+          className="container px-4 md:px-6 flex flex-col items-center"
+        >
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-8">
+            <span className="flex h-2 w-2 rounded-full bg-primary mr-2"></span>
+            AI-Powered Resume Analysis
+          </div>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl">
+            Land Your Dream Job at <br className="hidden md:block"/>
+            <span className="text-gradient">Top Tier Companies</span>
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl">
+            Upload your resume, select your target role and company, and get an instant ATS score, missing keywords, and actionable AI feedback.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <Link href="/upload">
+              <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 shadow-xl shadow-primary/25 rounded-full">
+                Upload Resume <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      {/* Features Section */}
+      <section className="w-full py-20 bg-muted/30 border-y border-border/50">
+        <div className="container px-4 md:px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Everything you need to stand out</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Our advanced AI algorithms analyze every aspect of your resume to ensure it passes the ATS and impresses human recruiters.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <FeatureCard 
+              icon={<BarChart className="h-10 w-10 text-primary" />}
+              title="ATS Scoring"
+              description="Get a precise ATS score calculated using TF-IDF and Cosine Similarity against actual company job descriptions."
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <FeatureCard 
+              icon={<FileText className="h-10 w-10 text-primary" />}
+              title="Keyword Optimization"
+              description="Discover missing keywords and skills required for your target role and company to beat the resume screening bots."
+            />
+            <FeatureCard 
+              icon={<BrainCircuit className="h-10 w-10 text-primary" />}
+              title="AI Feedback"
+              description="Receive qualitative, human-like feedback on your grammar, phrasing, and overall impact from advanced LLMs."
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Supported Companies */}
+      <section className="w-full py-20 relative overflow-hidden">
+        <div className="container px-4 md:px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Tailored for Top Tech Giants</h2>
+          <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+            {COMPANIES.map(company => (
+              <div key={company.id} className="glass px-6 py-3 rounded-full font-semibold text-lg hover:bg-primary/5 transition-colors cursor-default">
+                {company.name}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+  return (
+    <motion.div 
+      whileHover={{ y: -5 }}
+      className="glass-card p-8 rounded-2xl flex flex-col items-start"
+    >
+      <div className="mb-6 p-4 bg-primary/10 rounded-2xl">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed">{description}</p>
+    </motion.div>
   );
 }
