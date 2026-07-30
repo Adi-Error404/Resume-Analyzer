@@ -14,10 +14,10 @@ export function ResumeUploader() {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  
-  const [companies, setCompanies] = useState<{id: string, name: string}[]>([]);
-  const [roles, setRoles] = useState<{id: string, name: string}[]>([]);
-  
+
+  const [companies, setCompanies] = useState<{ id: string, name: string }[]>([]);
+  const [roles, setRoles] = useState<{ id: string, name: string }[]>([]);
+
   const [selectedCompany, setSelectedCompany] = useState<string>("");
   const [selectedRole, setSelectedRole] = useState<string>("");
 
@@ -32,7 +32,7 @@ export function ResumeUploader() {
       setError(fileRejections[0].errors[0].message || "Invalid file");
       return;
     }
-    
+
     const selectedFile = acceptedFiles[0];
     if (selectedFile) {
       if (selectedFile.size > 10 * 1024 * 1024) {
@@ -90,12 +90,12 @@ export function ResumeUploader() {
       }));
 
       setUploadProgress(100);
-      
+
       // Artificial delay for smooth progress bar UX
       setTimeout(() => {
         router.push("/dashboard");
       }, 500);
-      
+
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
       setIsUploading(false);
@@ -105,12 +105,12 @@ export function ResumeUploader() {
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-8">
-      
+
       {/* Settings Selection */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="text-sm font-medium">Target Company</label>
-          <Select onValueChange={setSelectedCompany} value={selectedCompany}>
+          <Select onValueChange={(value) => setSelectedCompany(value ?? '')} value={selectedCompany}>
             <SelectTrigger className="w-full h-12 bg-background/50 backdrop-blur">
               <SelectValue placeholder="Select a company" />
             </SelectTrigger>
@@ -137,11 +137,10 @@ export function ResumeUploader() {
       </div>
 
       {/* Upload Area */}
-      <div 
-        {...getRootProps()} 
-        className={`glass-card p-12 text-center rounded-3xl border-2 border-dashed transition-all cursor-pointer ${
-          isDragActive ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/50"
-        } ${file ? "border-green-500/50 bg-green-500/5" : ""}`}
+      <div
+        {...getRootProps()}
+        className={`glass-card p-12 text-center rounded-3xl border-2 border-dashed transition-all cursor-pointer ${isDragActive ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/50"
+          } ${file ? "border-green-500/50 bg-green-500/5" : ""}`}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center space-y-4">
@@ -154,7 +153,7 @@ export function ResumeUploader() {
               <UploadCloud className="w-10 h-10 text-primary" />
             </div>
           )}
-          
+
           <h3 className="text-2xl font-bold">
             {file ? "File Selected" : "Drag & drop your resume"}
           </h3>
@@ -182,9 +181,9 @@ export function ResumeUploader() {
       )}
 
       <div className="flex justify-end pt-4">
-        <Button 
-          size="lg" 
-          onClick={handleUpload} 
+        <Button
+          size="lg"
+          onClick={handleUpload}
           disabled={!file || !selectedCompany || !selectedRole || isUploading}
           className="w-full md:w-auto h-12 px-8 rounded-full shadow-lg"
         >
